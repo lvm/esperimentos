@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>botonera</title>
+  </head>
+  <body>
+
+
+    <canvas nx="matrix" id="xoxo"></canvas>
+
+    <script src="js/nexusUI.js"></script>
+    <script src="js/gibber.lib.min.js"></script>
+    <script>
+var matrix_xoxo = {
+    col: 4, // 2,
+    row: 1, // 2,
+    //matrix: [['*','o'], ['x','-']],
+    matrix: [['*','o', 'x','-']],
+    bpm: 64, // ? - no se usa todavia.
+    pattern: "....",
+    silence: ".",
+    drum: null,
+}
+
+function set_xoxo(){
+    xoxo.col = matrix_xoxo.col;
+    xoxo.row = matrix_xoxo.row;
+    xoxo.draw();
+
+    xoxo.bpm = matrix_xoxo.bpm;
+
+}
+
+
+function play_xo(pattern){
+    var _pos = function(r, c){
+        var p = 0;
+        for(var x=0;x<matrix_xoxo.row;x++){
+            for(var y=0;y<matrix_xoxo.col;y++){
+                if( x == r && y == c ){ return p; }else{ p++; }
+            }
+        };
+        return p;
+    }
+
+    var _at = function(str, pos, chr){
+        var tmp = str.split("");
+        tmp[pos] = chr;
+        return tmp.join("");
+    }
+
+    matrix_xoxo.pattern = _at(matrix_xoxo.pattern,
+                              _pos(pattern.row, pattern.col),
+                              pattern.level ? matrix_xoxo.matrix[pattern.row][pattern.col] : matrix_xoxo.silence);
+
+    console.log(matrix_xoxo.pattern);
+
+    if( matrix_xoxo.drum ){
+        matrix_xoxo.drum.kill();
+    }
+
+    matrix_xoxo.drum = EDrums(matrix_xoxo.pattern, 1/8);
+
+
+}
+
+
+// gibber
+
+Gibber.init();
+
+
+// nexusui
+nx.onload = function() {
+    set_xoxo();
+};
+
+nx.startPulse();
+nx.sendsTo(function(pattern){
+    play_xo(pattern);
+});
+    </script>
+  </body>
+</html>
