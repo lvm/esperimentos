@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>sonido tres d</title>
+  <style>
+  video, canvas {
+    position: absolute;
+    top:50px; left:0;
+  }
+  </style>
+</head>
+<body>
+  <p>
+    To use this demo, <button id="play">click me</button> (allow this page to use your webcam, I won't spy you. I promise.) and then move around the screen a <em>yellow thing</em>  to pan the audio from left to right, up and down.
+  </p>
+
+  <video id="video" width="640" height="480" preload autoplay loop muted controls></video>
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+  <script src="assets/js/tracking-min.js"></script>
+  <script src="assets/js/data/face.js"></script>
+  <script src="assets/js/AudioContextMonkeyPatch.js"></script>
+
+  <script src="assets/js/video.js"></script>
+  <script src="assets/js/audio.js"></script>
+  <script>
+    window.onload = function(){
+     SonidoFn.init();
+     VideoFn.init();
+
+     document.getElementById('play').addEventListener('click',
+                                                      function(){ VideoFn.start(); SonidoFn.play(); });
+   };
+  </script>
+</body>
+</html>
